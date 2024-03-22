@@ -72,4 +72,14 @@ class Grid
     array = Grid.insert_nodes(array)
     @matrix = Matrix[array[0], array[1], array[2], array[3], array[4], array[5]]
   end
+
+  def add_token(column, color)
+  end
+
+  def unoccupied_node(column_num)
+    column = @matrix.column(column_num).to_a
+    return unless column.any? { |node| node.color.nil? }
+
+    column.find { |node| node.color.nil? }
+  end
 end
