@@ -10,5 +10,10 @@ class Grid
   end
 
   def create_matrix
+    array = Array.new(6, [])
+    array.each_with_index do |_row, ind|
+      array[ind] = Array.new(7, nil)
+    end
+    @matrix = array
   end
 end
