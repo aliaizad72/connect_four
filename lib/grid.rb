@@ -16,4 +16,8 @@ class Grid
     end
     @matrix = array
   end
+
+  def self.in_grid?(row, col)
+    row >= 0 && row <= 6 && col >= 0 && col <= 7
+  end
 end
