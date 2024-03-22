@@ -3,20 +3,24 @@
 # Node is an object that links with other Nodes, in this context it construct the 'spaces' in the Grid
 class Node
   include Comparable # included for a test of equality in spec
+
+  MOVES = { north: [-1, 0],
+            east: [0, 1],
+            south: [1, 0],
+            west: [0, -1],
+            north_east: [-1, 1],
+            south_east: [1, 1],
+            south_west: [1, -1],
+            north_west: [-1, -1] }.freeze
+
   attr_accessor :color
-  attr_reader :coordinates, :north, :north_east, :east, :south_east, :south, :south_west, :west, :north_west
+  attr_reader :coordinates, :moves, :neighbors
 
   def initialize(coordinates)
     @coordinates = coordinates
     @color = nil
-    @north = find_neighbor([1, 0])
-    @north_east = find_neighbor([1, 1])
-    @east = find_neighbor([0, 1])
-    @south_east = find_neighbor([-1, 1])
-    @south = find_neighbor([-1, 0])
-    @south_west = find_neighbor([-1, -1])
-    @west = find_neighbor([0, -1])
-    @north_west = find_neighbor([1, -1])
+    @neighbors = @moves.transform_values { |vector| find_neighbor(vector) }.select { |_k, v| v }
+    # selecting non nil neighbors only^^
   end
 
   def <=>(other)
@@ -62,3 +66,5 @@ class Grid
     @matrix = Grid.insert_nodes(array)
   end
 end
+
+p Node.new([0, 0]).neighbors

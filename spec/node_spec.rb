@@ -8,13 +8,13 @@ describe Node do
     subject(:node_corner) { Node.new([0, 0]) }
     context 'given a coordinate and a vector' do
       it 'returns the neighbor coordinate if it exist in the grid' do
-        north_neighbor = [5, 4]
-        expect(node_middle.north).to eql(north_neighbor)
+        north_neighbor = [3, 4]
+        expect(node_middle.neighbors[:north]).to eql(north_neighbor)
       end
 
       it 'returns nil if coordinate does not exist in the grid' do
-        _south_neighbor = [-1, 0]
-        expect(node_corner.south).to be_nil
+        _north_neighbor = [-1, 0]
+        expect(node_corner.neighbors[:north]).to be_nil
       end
     end
   end
