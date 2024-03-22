@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
-require_relative '../lib/node'
-require_relative '../lib/grid'
+require_relative '../lib/main'
 
-describe Grid do
+describe Grid do # rubocop:disable Metrics/BlockLength
   describe '.in_grid?' do
     it 'returns true if the coordinates is in the grid' do
       valid_coordinates = [0, 0]
@@ -38,6 +37,18 @@ describe Grid do
     it 'all the index are filled with nil values' do
       matrix = grid_matrix.matrix
       result = matrix.all? { |array| array.all?(&:nil?) }
+      expect(result).to be true
+    end
+  end
+
+  describe '#insert_nodes' do
+    subject(:grid_nodes) { described_class.new }
+    it 'maps @matrix to an 2D array with Node objects' do
+      grid_nodes.insert_nodes
+      matrix = grid_nodes.matrix
+      result = matrix.all? do |row|
+        row.all? { |e| e.is_a? Node }
+      end
       expect(result).to be true
     end
   end

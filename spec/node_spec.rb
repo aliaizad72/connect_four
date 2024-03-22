@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../lib/node'
+require_relative '../lib/main'
 
 describe Node do
   describe '#find_neighbor' do
