@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
+require 'matrix'
 # Node is an object that links with other Nodes, in this context it construct the 'spaces' in the Grid
 class Node
   include Comparable # included for a test of equality in spec
 
+  # north is -1 on row axis becuase [0, 0] starts at top left, not bottom left
   MOVES = { north: [-1, 0],
             east: [0, 1],
             south: [1, 0],
@@ -19,8 +21,12 @@ class Node
   def initialize(coordinates)
     @coordinates = coordinates
     @color = nil
-    @neighbors = @moves.transform_values { |vector| find_neighbor(vector) }.select { |_k, v| v }
+    @neighbors = MOVES.transform_values { |vector| find_neighbor(vector) }.select { |_k, v| v }
     # selecting non nil neighbors only^^
+  end
+
+  def to_s
+    "#{coordinates}, neighbors: #{neighbors}"
   end
 
   def <=>(other)
@@ -42,12 +48,12 @@ class Grid
   attr_accessor :matrix
 
   def initialize
-    @matrix = nil
+    @matrix = nil # matrix to make it easier for inputting which column player wants to select
     create_matrix # matrix is used as coordinates reference for the nodes
   end
 
   def self.in_grid?(row, col)
-    row >= 0 && row <= 6 && col >= 0 && col <= 7
+    row >= 0 && row < 6 && col >= 0 && col < 7
   end
 
   def self.insert_nodes(array)
@@ -63,8 +69,7 @@ class Grid
     array.each_index do |ind|
       array[ind] = Array.new(7, nil)
     end
-    @matrix = Grid.insert_nodes(array)
+    array = Grid.insert_nodes(array)
+    @matrix = Matrix[array[0], array[1], array[2], array[3], array[4], array[5]]
   end
 end
-
-p Node.new([0, 0]).neighbors
