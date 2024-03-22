@@ -21,6 +21,15 @@ describe Grid do # rubocop:disable Metrics/BlockLength
     end
   end
 
+  describe '.insert_nodes' do
+    it 'maps n x n array with Node objects' do
+      array = [[nil, nil], [nil, nil]]
+      mapped = [[Node.new([0, 0]), Node.new([0, 1])], [Node.new([1, 0]), Node.new([1, 1])]]
+      result = Grid.insert_nodes(array)
+      expect(result).to eq(mapped)
+    end
+  end
+
   describe '#create_matrix' do
     subject(:grid_matrix) { described_class.new }
     it 'creates an outer array of length 6' do
@@ -34,18 +43,8 @@ describe Grid do # rubocop:disable Metrics/BlockLength
       expect(result).to be true
     end
 
-    it 'all the index are filled with nil values' do
+    it 'filled with Node objects' do
       matrix = grid_matrix.matrix
-      result = matrix.all? { |array| array.all?(&:nil?) }
-      expect(result).to be true
-    end
-  end
-
-  describe '#insert_nodes' do
-    subject(:grid_nodes) { described_class.new }
-    it 'maps @matrix to an 2D array with Node objects' do
-      grid_nodes.insert_nodes
-      matrix = grid_nodes.matrix
       result = matrix.all? do |row|
         row.all? { |e| e.is_a? Node }
       end

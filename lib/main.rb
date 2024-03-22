@@ -2,6 +2,7 @@
 
 # Node is an object that links with other Nodes, in this context it construct the 'spaces' in the Grid
 class Node
+  include Comparable # included for a test of equality in spec
   attr_accessor :color
   attr_reader :coordinates, :north, :north_east, :east, :south_east, :south, :south_west, :west, :north_west
 
@@ -16,6 +17,10 @@ class Node
     @south_west = find_neighbor([-1, -1])
     @west = find_neighbor([0, -1])
     @north_west = find_neighbor([1, -1])
+  end
+
+  def <=>(other)
+    coordinates <=> other.coordinates
   end
 
   def find_neighbor(vector)
@@ -35,11 +40,18 @@ class Grid
   def initialize
     @matrix = nil
     create_matrix # matrix is used as coordinates reference for the nodes
-    insert_nodes
   end
 
   def self.in_grid?(row, col)
     row >= 0 && row <= 6 && col >= 0 && col <= 7
+  end
+
+  def self.insert_nodes(array)
+    array.each_with_index do |row, row_ind|
+      row.each_index do |col_ind|
+        array[row_ind][col_ind] = Node.new([row_ind, col_ind])
+      end
+    end
   end
 
   def create_matrix
@@ -47,14 +59,6 @@ class Grid
     array.each_index do |ind|
       array[ind] = Array.new(7, nil)
     end
-    @matrix = array
-  end
-
-  def insert_nodes
-    @matrix.each_with_index do |row, row_ind|
-      row.each_index do |col_ind|
-        @matrix[row_ind][col_ind] = Node.new([row_ind, col_ind])
-      end
-    end
+    @matrix = Grid.insert_nodes(array)
   end
 end
