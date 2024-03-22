@@ -52,28 +52,29 @@ describe Grid do # rubocop:disable Metrics/BlockLength
   end
 
   describe '#add_token' do
-    context 'it changes the color of that node from nil' do
+    subject(:grid_add) { described_class.new }
+    context 'with spaces in the columns' do
+      before do
+        column_num = 0
+        node = grid_add.column(column_num)[0]
+        allow(grid_add).to receive(:unoccupied_node).with(column_num).and_return(node)
+      end
 
+      it 'changes the node colour from nil to color' do
+        column_num = 0
+        color = 'yellow'
+        node = grid_add.column(column_num)[0]
+        expect { grid_add.add_token(column_num, color) }.to change { node.color }.from(nil).to(color)
+      end
     end
-
     describe '#unoccupied_node' do
       subject(:grid_unoccupied) { described_class.new }
-      context 'finds an unoccupied node in the selected column' do
-        it 'returns the node if column is not full' do
-          column_num = 1
-          column = grid_unoccupied.matrix.column(column_num).to_a
-          node = column[0] # since the subject above does not change the matrix YET
-          result = grid_unoccupied.unoccupied_node(column_num)
-          expect(result).to equal(node)
-        end
-
-        it 'returns nil if column is full' do
-          column_num = 1
-          grid_unoccupied.matrix.column(column_num).to_a.map { |node| node.color = 'yellow' }
-          # for some reason, original matrix can be changed like this^^
-          result = grid_unoccupied.unoccupied_node(column_num)
-          expect(result).to be_nil
-        end
+      it 'returns the node if column is not full' do
+        column_num = 0
+        column = grid_unoccupied.column(column_num)
+        node = column[0] # since the subject above does not change the matrix YET
+        result = grid_unoccupied.unoccupied_node(column_num)
+        expect(result).to equal(node)
       end
     end
   end
