@@ -2,7 +2,7 @@
 
 require_relative '../lib/main'
 
-describe Game do
+describe Game do # rubocop:disable Metrics/BlockLength
   describe '#add_players' do
     subject(:game_add) { described_class.new }
     let(:player_one) { Player.new('Ali', 'blue') }
@@ -26,6 +26,22 @@ describe Game do
         turn = 1
         result = game_add.ask_name(turn)
         expect(result).to eql('Ali')
+      end
+    end
+  end
+
+  describe '#ask_column' do
+    subject(:game_ask_col) { described_class.new }
+    let(:player_one) { Player.new('Ali', 'blue') }
+    context 'with the right input' do
+      before do
+        allow(game_ask_col).to receive(:gets).and_return('2')
+      end
+
+      it 'returns the input' do
+        input = '2'
+        result = game_ask_col.ask_column(player_one)
+        expect(result).to eql(input)
       end
     end
   end

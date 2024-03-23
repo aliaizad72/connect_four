@@ -164,8 +164,21 @@ class Game
   end
 
   def ask_name(turn)
-    print "Player #{turn}, enter your name:"
+    print "Player #{turn}, enter your name: "
     gets.chomp
+  end
+
+  def tell_color(player)
+    puts "#{player.name}, your token colour is #{player.color}."
+  end
+
+  def ask_column(player, input = 'wrong')
+    until input.to_i > 0 && input.to_i < 8 # rubocop:disable Style/NumericPredicate
+      print "#{player.name}, enter the column of your choice: "
+      input = gets.chomp
+      puts 'ENTER NUMBER FROM 1 TO 7!' if input.to_i <= 0 || input.to_i > 7
+    end
+    input
   end
 end
 
