@@ -92,6 +92,18 @@ class Grid
   def full?
     @matrix.to_a.flatten.all?(&:color)
   end
+
+  def four_in_a_row?(coordinates)
+    node = @matrix[coordinates[0], coordinates[1]]
+  end
+
+  def traverse_four(node, direction, count = 1)
+    coordinates = node.neighbors[direction]
+    neighbor = @matrix[coordinates[0], coordinates[1]]
+    return count if neighbor.color.nil? || neighbor.color != node.color || count == 4
+
+    traverse_four(neighbor, direction, count + 1)
+  end
 end
 
-puts Grid.new.matrix
+grid = Grid.new
