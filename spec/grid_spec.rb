@@ -67,12 +67,13 @@ describe Grid do # rubocop:disable Metrics/BlockLength
         expect { grid_add.add_token(column_num, color) }.to change { node.color }.from(nil).to(color)
       end
     end
+
     describe '#unoccupied_node' do
       subject(:grid_unoccupied) { described_class.new }
       it 'returns the node if column is not full' do
         column_num = 0
-        column = grid_unoccupied.column(column_num)
-        node = column[0] # since the subject above does not change the matrix YET
+        grid_unoccupied.column(column_num)[0].color = 'blue' # modifying mat so that it is partially full
+        node = grid_unoccupied.column(column_num)[1] # 1 is the node that we want since 0 is 'taken'
         result = grid_unoccupied.unoccupied_node(column_num)
         expect(result).to equal(node)
       end
