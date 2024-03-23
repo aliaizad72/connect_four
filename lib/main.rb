@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'matrix'
+require 'colorize'
 # Node is an object that links with other Nodes, in this context it construct the 'spaces' in the Grid
 class Node
   include Comparable # included for a test of equality in spec
@@ -40,6 +41,17 @@ class Node
     return unless Grid.in_grid?(row, col)
 
     [row, col]
+  end
+
+  def show
+    case color
+    when 'yellow'
+      '🟡'
+    when 'blue'
+      '🔵'
+    else
+      '⚪'
+    end
   end
 end
 
