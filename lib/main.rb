@@ -27,7 +27,14 @@ class Node
   end
 
   def to_s
-    "#{coordinates}, neighbors: #{neighbors}"
+    case color
+    when 'yellow'
+      '🟡'
+    when 'blue'
+      '🔵'
+    else
+      '⚪'
+    end
   end
 
   def <=>(other)
@@ -41,17 +48,6 @@ class Node
     return unless Grid.in_grid?(row, col)
 
     [row, col]
-  end
-
-  def show
-    case color
-    when 'yellow'
-      '🟡'
-    when 'blue'
-      '🔵'
-    else
-      '⚪'
-    end
   end
 end
 
@@ -121,4 +117,37 @@ class Grid
 
     traverse_four(neighbor, direction, count + 1)
   end
+
+  def show # rubocop:disable Metrics/AbcSize
+    puts <<-HEREDOC
+
+    #{row_seperator}
+    #{show_row(5)}
+    #{row_seperator}
+    #{show_row(4)}
+    #{row_seperator}
+    #{show_row(3)}
+    #{row_seperator}
+    #{show_row(2)}
+    #{row_seperator}
+    #{show_row(1)}
+    #{row_seperator}
+    #{show_row(0)}
+    #{row_seperator}
+    | 1️⃣  | 2️⃣  | 3️⃣  | 4️⃣  | 5️⃣  | 6️⃣  | 7️⃣  |
+    #{row_seperator}
+
+    HEREDOC
+  end
+
+  def row_seperator
+    '+----+----+----+----+----+----+----+'
+  end
+
+  def show_row(row_num)
+    "| #{@matrix[row_num, 0]} | #{@matrix[row_num, 1]} | #{@matrix[row_num, 2]} | #{@matrix[row_num, 3]} | #{@matrix[row_num, 4]} | #{@matrix[row_num, row_num]} | #{@matrix[row_num, 6]} |" # rubocop:disable Layout/LineLength
+  end
 end
+
+grid = Grid.new
+grid.show
