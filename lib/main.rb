@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'matrix'
-require 'colorize'
 # Node is an object that links with other Nodes, in this context it construct the 'spaces' in the Grid
 class Node
   include Comparable # included for a test of equality in spec
@@ -118,7 +117,7 @@ class Grid
     traverse_four(neighbor, direction, count + 1)
   end
 
-  def show # rubocop:disable Metrics/AbcSize
+  def show
     puts <<-HEREDOC
 
     #{row_seperator}
@@ -149,5 +148,33 @@ class Grid
   end
 end
 
-grid = Grid.new
-grid.show
+# Game handles the logic/flow of the game
+class Game
+  attr_accessor :players, :grid
+
+  COLORS = %w[blue yellow].shuffle.freeze
+
+  def initialize
+    @players = []
+    @grid = Grid.new
+  end
+
+  def add_players
+    2.times { |i| @players.push(Player.new(ask_name(i + 1), COLORS[i])) }
+  end
+
+  def ask_name(turn)
+    print "Player #{turn}, enter your name:"
+    gets.chomp
+  end
+end
+
+# Player contains player node color and their name
+class Player
+  attr_reader :name, :color
+
+  def initialize(name, color)
+    @name = name
+    @color = color
+  end
+end
