@@ -94,7 +94,12 @@ class Grid
   end
 
   def four_in_a_row?(coordinates)
+    result = false
     node = @matrix[coordinates[0], coordinates[1]]
+    node.neighbors.each_key do |direction|
+      result = true if traverse_four(node, direction) == 4
+    end
+    result
   end
 
   def traverse_four(node, direction, count = 1)
@@ -105,5 +110,3 @@ class Grid
     traverse_four(neighbor, direction, count + 1)
   end
 end
-
-grid = Grid.new

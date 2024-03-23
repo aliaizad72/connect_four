@@ -97,7 +97,28 @@ describe Grid do # rubocop:disable Metrics/BlockLength
     end
   end
 
-  describe '#winner?' do
-    subject(:grid_winner?) { described_class.new }
+  describe '#four_in_a_row?' do
+    describe '#traverse_four' do
+      subject(:grid_four) { described_class.new }
+      context 'a recursive method that travel in one direction of node until it has travel 4 nodes or reached a deadend' do # rubocop:disable Layout/LineLength
+        it 'if method is called less than 4 times, it will return less than 4' do
+          grid_four.matrix[0, 0].color = 'blue'
+          grid_four.matrix[0, 1].color = 'blue'
+          node = grid_four.matrix[0, 1]
+          result = grid_four.traverse_four(node, :east)
+          expect(result).to be < 4
+        end
+
+        it 'if method is called four times, it will return 4' do
+          grid_four.matrix[0, 0].color = 'blue'
+          grid_four.matrix[0, 1].color = 'blue'
+          grid_four.matrix[0, 2].color = 'blue'
+          grid_four.matrix[0, 3].color = 'blue'
+          node = grid_four.matrix[0, 0]
+          result = grid_four.traverse_four(node, :east)
+          expect(result).to equal(4)
+        end
+      end
+    end
   end
 end
