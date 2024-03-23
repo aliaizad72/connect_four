@@ -97,9 +97,16 @@ describe Grid do # rubocop:disable Metrics/BlockLength
     end
   end
 
-  describe '#four_in_a_row?' do
+  describe '#four_in_a_row?' do # rubocop:disable Metrics/BlockLength
+    subject(:grid_four) { described_class.new }
+    it 'returns true when there are four same coloured tokens in a row' do
+      # color the entire column by same color
+      grid_four.column(0).each { |node| node.color = 'red' }
+      result = grid_four.four_in_a_row?([0, 0])
+      expect(result).to be true
+    end
+
     describe '#traverse_four' do
-      subject(:grid_four) { described_class.new }
       context 'a recursive method that travel in one direction of node until it has travel 4 nodes or reached a deadend' do # rubocop:disable Layout/LineLength
         it 'if method is called less than 4 times, it will return less than 4' do
           grid_four.matrix[0, 0].color = 'blue'
