@@ -79,4 +79,21 @@ describe Grid do # rubocop:disable Metrics/BlockLength
       end
     end
   end
+
+  describe '#full?' do
+    subject(:grid_full) { described_class.new }
+    it 'returns true when the matrix is full' do
+      # populate node matrix with color
+      grid_full.matrix.to_a.flatten.each { |node| node.color = 'blue' }
+      result = grid_full.full?
+      expect(result).to be true
+    end
+
+    it 'returns false when the matrix is not full' do
+      # populate just a column with color
+      grid_full.column(1).each { |node| node.color = 'red' }
+      result = grid_full.full?
+      expect(result).to be false
+    end
+  end
 end

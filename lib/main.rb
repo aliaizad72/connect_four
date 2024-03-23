@@ -6,14 +6,13 @@ class Node
   include Comparable # included for a test of equality in spec
 
   # north is -1 on row axis becuase [0, 0] starts at top left, not bottom left
-  MOVES = { north: [-1, 0],
-            east: [0, 1],
-            south: [1, 0],
-            west: [0, -1],
-            north_east: [-1, 1],
-            south_east: [1, 1],
-            south_west: [1, -1],
-            north_west: [-1, -1] }.freeze
+  NEIGHBOR_VECTORS = { north: [-1, 0],
+                       south: [1, 0],
+                       west: [0, -1],
+                       north_east: [-1, 1],
+                       south_east: [1, 1],
+                       south_west: [1, -1],
+                       north_west: [-1, -1] }.freeze
 
   attr_accessor :color
   attr_reader :coordinates, :moves, :neighbors
@@ -21,7 +20,7 @@ class Node
   def initialize(coordinates)
     @coordinates = coordinates
     @color = nil
-    @neighbors = MOVES.transform_values { |vector| find_neighbor(vector) }.select { |_k, v| v }
+    @neighbors = NEIGHBOR_VECTORS.transform_values { |vector| find_neighbor(vector) }.select { |_k, v| v }
     # selecting non nil neighbors only^^
   end
 
@@ -87,5 +86,9 @@ class Grid
 
   def column(column_num)
     @matrix.column(column_num).to_a
+  end
+
+  def full?
+    @matrix.to_a.flatten.all?(&:color)
   end
 end
