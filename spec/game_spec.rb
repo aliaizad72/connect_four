@@ -44,5 +44,17 @@ describe Game do # rubocop:disable Metrics/BlockLength
         expect(result).to eql(input)
       end
     end
+
+    context 'with the wrong input once, and the right input after' do
+      before do
+        allow(game_ask_col).to receive(:gets).and_return('wrong again', '2')
+      end
+
+      it 'outputs error prompt once' do
+        error_prompt =  'ENTER NUMBER FROM 1 TO 7!'
+        expect(game_ask_col).to receive(:puts).with(error_prompt).once
+        game_ask_col.ask_column(player_one)
+      end
+    end
   end
 end
