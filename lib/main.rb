@@ -6,13 +6,14 @@ class Node
   include Comparable # included for a test of equality in spec
 
   # north is -1 on row axis becuase [0, 0] starts at top left, not bottom left
-  NEIGHBOR_VECTORS = { north: [-1, 0],
-                       south: [1, 0],
+  NEIGHBOR_VECTORS = { north: [1, 0],
+                       south: [-1, 0],
+                       east: [0, 1],
                        west: [0, -1],
-                       north_east: [-1, 1],
-                       south_east: [1, 1],
-                       south_west: [1, -1],
-                       north_west: [-1, -1] }.freeze
+                       north_east: [1, 1],
+                       south_east: [-1, 1],
+                       south_west: [-1, -1],
+                       north_west: [1, -1] }.freeze
 
   attr_accessor :color
   attr_reader :coordinates, :moves, :neighbors
@@ -92,3 +93,5 @@ class Grid
     @matrix.to_a.flatten.all?(&:color)
   end
 end
+
+puts Grid.new.matrix

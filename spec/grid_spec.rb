@@ -96,4 +96,8 @@ describe Grid do # rubocop:disable Metrics/BlockLength
       expect(result).to be false
     end
   end
+
+  describe '#winner?' do
+    subject(:grid_winner?) { described_class.new }
+  end
 end
