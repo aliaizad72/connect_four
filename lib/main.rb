@@ -88,6 +88,10 @@ class Grid
     column(column_num).find { |node| node.color.nil? }
   end
 
+  def empty_node_coordinates(column_num)
+    unoccupied_node(column_num).coordinates
+  end
+
   def column_full?(column_num)
     result = column(column_num).none? { |node| node.color.nil? }
     puts 'This column is full, try another column.' if result
@@ -135,7 +139,7 @@ class Grid
     #{row_seperator}
     #{show_row(0)}
     #{row_seperator}
-    | 1️⃣  | 2️⃣  | 3️⃣  | 4️⃣  | 5️⃣  | 6️⃣  | 7️⃣  |
+    | 0️⃣  | 1️⃣  | 2️⃣  | 3️⃣  | 4️⃣  | 5️⃣  | 6️⃣  |
     #{row_seperator}
 
     HEREDOC
@@ -146,7 +150,7 @@ class Grid
   end
 
   def show_row(row_num)
-    "| #{@matrix[row_num, 0]} | #{@matrix[row_num, 1]} | #{@matrix[row_num, 2]} | #{@matrix[row_num, 3]} | #{@matrix[row_num, 4]} | #{@matrix[row_num, row_num]} | #{@matrix[row_num, 6]} |" # rubocop:disable Layout/LineLength
+    "| #{@matrix[row_num, 0]} | #{@matrix[row_num, 1]} | #{@matrix[row_num, 2]} | #{@matrix[row_num, 3]} | #{@matrix[row_num, 4]} | #{@matrix[row_num, 5]} | #{@matrix[row_num, 6]} |" # rubocop:disable Layout/LineLength
   end
 end
 
@@ -186,7 +190,8 @@ class Game
       @players.each do |player|
         grid.show
         column_num = ask_column(player)
-        winner = true
+        coordinates = grid.empty_node_coordinates(column_num)
+        grid.add_token(column_num, player.color)
       end
     end
   end
@@ -208,11 +213,11 @@ class Player
   end
 
   def choose_column
-    input = 'wrong'
-    until input.to_i > 0 && input.to_i < 8 # rubocop:disable Style/NumericPredicate
+    input = 7
+    until input.to_i >= 0 && input.to_i < 7
       print "#{name}, enter the column of your choice: "
       input = gets.chomp
-      puts 'ENTER NUMBER FROM 1 TO 7!' if input.to_i <= 0 || input.to_i > 7
+      puts 'ENTER NUMBER FROM 0 TO 6!' if input.to_i.negative? || input.to_i > 6
     end
     input.to_i
   end
@@ -241,4 +246,4 @@ class ConnectFour
   end
 end
 
-# ConnectFour.new.play
+ConnectFour.new.play
