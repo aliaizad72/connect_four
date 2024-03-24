@@ -136,19 +136,19 @@ class Grid
     n_neighbors_in_direction?(neighbor, direction, target_count, count + 1)
   end
 
-  def node_endpoint_win(node, direction)
+  def node_endpoint_win?(node, direction)
     n_neighbors_in_direction?(node, direction, 3)
   end
 
-  def node_midpoint_win(node, direction)
-    node_midpoint_one(node, direction) || node_midpoint_two(node, direction)
+  def node_midpoint_win?(node, direction)
+    midpoint_case_one(node, direction) || midpoint_case_two(node, direction)
   end
 
-  def node_midpoint_one(node, direction)
+  def midpoint_case_one(node, direction)
     n_neighbors_in_direction?(node, direction, 2) && n_neighbors_in_direction?(node, node.opposite(direction), 1)
   end
 
-  def node_midpoint_two(node, direction)
+  def midpoint_case_two(node, direction)
     n_neighbors_in_direction?(node, direction, 1) && n_neighbors_in_direction?(node, node.opposite(direction), 2)
   end
 
