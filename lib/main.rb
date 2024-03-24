@@ -21,7 +21,7 @@ class Node
   def initialize(coordinates)
     @coordinates = coordinates
     @color = nil
-    @neighbors = NEIGHBOR_VECTORS.transform_values { |vector| find_neighbor(vector) }.select { |_k, v| v }
+    @neighbors = NEIGHBOR_VECTORS.transform_values { |vector| neighbor(vector) }.select { |_k, v| v }
     # selecting non nil neighbors only^^
   end
 
@@ -40,7 +40,7 @@ class Node
     coordinates <=> other.coordinates
   end
 
-  def find_neighbor(vector)
+  def neighbor(vector)
     row = @coordinates[0] + vector[0]
     col = @coordinates[1] + vector[1]
 
@@ -117,6 +117,8 @@ class Grid
 
   def traverse_four(node, direction, count = 1)
     coordinates = node.neighbors[direction]
+    return count if coordinates.nil? || coordinates.empty?
+
     neighbor = @matrix[coordinates[0], coordinates[1]]
     return count if neighbor.color.nil? || neighbor.color != node.color || count == 4
 
@@ -184,7 +186,7 @@ class Game
     @players.each(&:tell_color)
   end
 
-  def play_round
+  def play_round # rubocop:disable Metrics/MethodLength
     winner = false
     until winner || grid.full?
       @players.each do |player|
@@ -192,8 +194,19 @@ class Game
         column_num = ask_column(player)
         coordinates = grid.empty_node_coordinates(column_num)
         grid.add_token(column_num, player.color)
+        grid.show
+
+        if grid.four_in_a_row?(coordinates)
+          winner = true
+          announce_winner(player)
+          break
+        end
       end
     end
+  end
+
+  def announce_winner(player)
+    puts "#{player.name}, you won!"
   end
 
   def ask_column(player)
@@ -246,4 +259,4 @@ class ConnectFour
   end
 end
 
-ConnectFour.new.play
+# ConnectFour.new.play

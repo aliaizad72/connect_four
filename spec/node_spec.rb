@@ -3,7 +3,7 @@
 require_relative '../lib/main'
 
 describe Node do
-  describe '#find_neighbor' do
+  describe '#neighbor' do
     subject(:node_middle) { Node.new([4, 4]) }
     subject(:node_corner) { Node.new([0, 0]) }
     context 'given a coordinate and a vector' do
