@@ -175,5 +175,34 @@ describe Grid do # rubocop:disable Metrics/BlockLength
         end
       end
     end
+
+    describe '#node_midpoint_win?' do
+      subject(:grid_midpoint) { described_class.new }
+      context 'a midpoint is the second or third node in line of four nodes' do
+        describe '#midpoint_case_one' do
+          context 'the first win case for midpoint node is when there are 2 nodes in the direction given and 1 node in the opposite direction' do # rubocop:disable Layout/LineLength
+            it 'returns false if the four nodes is not of the same color' do
+              grid_midpoint.matrix[0, 0].color = 'red'
+              grid_midpoint.matrix[0, 1].color = 'blue'
+              grid_midpoint.matrix[0, 2].color = 'blue'
+              grid_midpoint.matrix[0, 3].color = 'blue'
+              midpoint = grid_midpoint.matrix[0, 1]
+              result = grid_midpoint.midpoint_case_one(midpoint, :east)
+              expect(result).to be false
+            end
+
+            it 'returns true if the four nodes is of the same color' do
+              grid_midpoint.matrix[0, 0].color = 'blue'
+              grid_midpoint.matrix[0, 1].color = 'blue'
+              grid_midpoint.matrix[0, 2].color = 'blue'
+              grid_midpoint.matrix[0, 3].color = 'blue'
+              midpoint = grid_midpoint.matrix[0, 1]
+              result = grid_midpoint.midpoint_case_one(midpoint, :east)
+              expect(result).to be true
+            end
+          end
+        end
+      end
+    end
   end
 end
