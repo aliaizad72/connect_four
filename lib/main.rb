@@ -167,10 +167,6 @@ class Game
     print "Player #{turn}, enter your name: "
     gets.chomp
   end
-
-  def tell_color(player)
-    puts "#{player.name}, your token colour is #{player.color}."
-  end
 end
 
 # Player contains player node color and their name
@@ -190,4 +186,24 @@ class Player
     end
     input
   end
+
+  def tell_color
+    puts "#{name}, your token colour is #{color}."
+  end
 end
+
+# ConnectFour: outermost class that user will interact with
+class ConnectFour
+  def play
+    introduction
+  end
+
+  def introduction
+    puts "Let's play Connect Four!"
+    puts "Your goal in this game is to 'connect' four of your tokens to line up consecutively in the horizontal, vertical or diagonal direction." # rubocop:disable Layout/LineLength
+    puts 'At the start of the game, you will be assigned either the blue token, or the yellow token.'
+    puts 'Have fun!'
+  end
+end
+
+ConnectFour.new.play

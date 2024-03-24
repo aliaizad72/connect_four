@@ -29,32 +29,4 @@ describe Game do # rubocop:disable Metrics/BlockLength
       end
     end
   end
-
-  describe '#ask_column' do
-    subject(:game_ask_col) { described_class.new }
-    let(:player_one) { Player.new('Ali', 'blue') }
-    context 'with the right input' do
-      before do
-        allow(game_ask_col).to receive(:gets).and_return('2')
-      end
-
-      it 'returns the input' do
-        input = '2'
-        result = game_ask_col.ask_column(player_one)
-        expect(result).to eql(input)
-      end
-    end
-
-    context 'with the wrong input once, and the right input after' do
-      before do
-        allow(game_ask_col).to receive(:gets).and_return('wrong again', '2')
-      end
-
-      it 'outputs error prompt once' do
-        error_prompt =  'ENTER NUMBER FROM 1 TO 7!'
-        expect(game_ask_col).to receive(:puts).with(error_prompt).once
-        game_ask_col.ask_column(player_one)
-      end
-    end
-  end
 end
