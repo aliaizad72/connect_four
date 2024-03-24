@@ -121,7 +121,7 @@ class Grid
     result = false
     node = @matrix[coordinates[0], coordinates[1]]
     node.neighbors.each_key do |direction|
-      result = true if node_endpoint_win(node, direction) || node_midpoint_win(node, direction)
+      result = true if node_endpoint_win?(node, direction) || node_midpoint_win?(node, direction)
     end
     result
   end
@@ -204,7 +204,7 @@ class Game
   end
 
   def play
-    add_players
+    add_players if @players.empty?
     announce_colors
     play_round
   end
@@ -213,7 +213,7 @@ class Game
     @players.each(&:tell_color)
   end
 
-  def play_round # rubocop:disable Metrics/MethodLength
+  def play_round # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     winner = false
     until winner || grid.full?
       @players.each do |player|
@@ -221,9 +221,9 @@ class Game
         column_num = ask_column(player)
         coordinates = grid.empty_node_coordinates(column_num)
         grid.add_token(column_num, player.color)
-        grid.show
 
-        if grid.four_in_a_row?(coordinates)
+        if grid.four_in_a_row?(coordinates) # rubocop:disable Style/Next
+          grid.show
           winner = true
           announce_winner(player)
           break
@@ -240,6 +240,10 @@ class Game
     column_num = player.choose_column
     column_num = player.choose_column while grid.column_full?(column_num)
     column_num
+  end
+
+  def reset
+    @grid = Grid.new
   end
 end
 
@@ -273,6 +277,7 @@ class ConnectFour
     introduction
     game = Game.new
     game.play
+    play_again(game)
   end
 
   def introduction
@@ -284,6 +289,19 @@ class ConnectFour
     puts 'The token will fall down to the lowest row in the column that does not contain a token yet.'
     puts "Whoever connects four first, wins! Have fun!\n\n"
   end
+
+  def play_again(game)
+    while ask_play_again == 'y'
+      game.reset
+      game.play
+    end
+    puts 'Thanks for playing!'
+  end
+
+  def ask_play_again
+    print 'Do you want to play again?(y/n): '
+    gets.chomp
+  end
 end
 
-# ConnectFour.new.play
+ConnectFour.new.play
