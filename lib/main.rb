@@ -48,6 +48,17 @@ class Node
 
     [row, col]
   end
+
+  def opposite(direction)
+    { north: :south,
+      east: :west,
+      south: :north,
+      west: :east,
+      north_east: :south_west,
+      south_east: :north_west,
+      south_west: :north_east,
+      north_west: :south_east }[direction]
+  end
 end
 
 # Grid is where the game will be played, consists of Nodes that know its neighbours
@@ -110,7 +121,7 @@ class Grid
     result = false
     node = @matrix[coordinates[0], coordinates[1]]
     node.neighbors.each_key do |direction|
-      result = true if count_neighbors_in_direction(node, direction, 4) == 4
+      result = true if node_endpoint_win(node, direction)
     end
     result
   end
@@ -123,6 +134,10 @@ class Grid
     return count if neighbor.color.nil? || neighbor.color != node.color || count == target_count
 
     count_neighbors_in_direction(neighbor, direction, target_count, count + 1)
+  end
+
+  def node_endpoint_win(node, direction)
+    count_neighbors_in_direction(node, direction, 4) == 4
   end
 
   def show
