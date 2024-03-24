@@ -127,13 +127,32 @@ describe Grid do # rubocop:disable Metrics/BlockLength
       expect(result).to be true
     end
 
-    describe '#count_neighbors_in_direction' do
+    describe '#count_neighbors_in_direction' do # rubocop:disable Metrics/BlockLength
       context 'a recursive method that counts neighbors in one direction of node until it has count the target counts or reached a deadend' do # rubocop:disable Layout/LineLength
+        it 'returns the target_count if target is reached' do
+          grid_four.matrix[0, 0].color = 'blue'
+          grid_four.matrix[0, 1].color = 'blue'
+          node = grid_four.matrix[0, 0]
+          target_count = 1
+          result = grid_four.count_neighbors_in_direction(node, :east, target_count)
+          expect(result).to equal(target_count)
+        end
+
+        it 'returns the count if target is not reached' do
+          grid_four.matrix[0, 0].color = 'blue'
+          grid_four.matrix[0, 1].color = 'blue'
+          node = grid_four.matrix[0, 0]
+          target_count = 2
+          result = grid_four.count_neighbors_in_direction(node, :east, target_count)
+          expect(result).to equal(1)
+        end
+
         it 'returns the count when node is trying to move in direction outside of grid' do
           grid_four.matrix[1, 1].color = 'blue'
           grid_four.matrix[0, 0].color = 'blue'
           node = grid_four.matrix[1, 1]
-          result = grid_four.count_neighbors_in_direction(node, :south_west, 4)
+          target_count = 4
+          result = grid_four.count_neighbors_in_direction(node, :south_west, target_count)
           expect(result).to equal(1)
         end
       end
