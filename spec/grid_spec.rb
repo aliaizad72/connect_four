@@ -176,9 +176,9 @@ describe Grid do # rubocop:disable Metrics/BlockLength
       end
     end
 
-    describe '#node_midpoint_win?' do
+    describe '#node_midpoint_win?' do # rubocop:disable Metrics/BlockLength
       subject(:grid_midpoint) { described_class.new }
-      context 'a midpoint is the second or third node in line of four nodes' do
+      context 'a midpoint is the second or third node in line of four nodes' do # rubocop:disable Metrics/BlockLength
         describe '#midpoint_case_one' do
           context 'the first win case for midpoint node is when there are 2 nodes in the direction given and 1 node in the opposite direction' do # rubocop:disable Layout/LineLength
             it 'returns false if the four nodes is not of the same color' do
@@ -198,6 +198,30 @@ describe Grid do # rubocop:disable Metrics/BlockLength
               grid_midpoint.matrix[0, 3].color = 'blue'
               midpoint = grid_midpoint.matrix[0, 1]
               result = grid_midpoint.midpoint_case_one(midpoint, :east)
+              expect(result).to be true
+            end
+          end
+        end
+
+        describe '#midpoint_case_two' do
+          context 'the second win case for midpoint node is when there are 1 nodes in the direction given and 2 nodes in the opposite direction' do # rubocop:disable Layout/LineLength
+            it 'returns false if the four nodes is not of the same color' do
+              grid_midpoint.matrix[0, 0].color = 'blu'
+              grid_midpoint.matrix[0, 1].color = 'blue'
+              grid_midpoint.matrix[0, 2].color = 'blue'
+              grid_midpoint.matrix[0, 3].color = 'red'
+              midpoint = grid_midpoint.matrix[0, 2]
+              result = grid_midpoint.midpoint_case_two(midpoint, :east)
+              expect(result).to be false
+            end
+
+            it 'returns true if the four nodes is of the same color' do
+              grid_midpoint.matrix[0, 0].color = 'blue'
+              grid_midpoint.matrix[0, 1].color = 'blue'
+              grid_midpoint.matrix[0, 2].color = 'blue'
+              grid_midpoint.matrix[0, 3].color = 'blue'
+              midpoint = grid_midpoint.matrix[0, 2]
+              result = grid_midpoint.midpoint_case_two(midpoint, :east)
               expect(result).to be true
             end
           end
