@@ -146,6 +146,14 @@ describe Grid do # rubocop:disable Metrics/BlockLength
           result = grid_four.traverse_four(node, :east)
           expect(result).to equal(4)
         end
+
+        it 'returns the traverse count when node is trying to move in direction outside of grid' do
+          grid_four.matrix[1, 1].color = 'blue'
+          grid_four.matrix[0, 0].color = 'blue'
+          node = grid_four.matrix[1, 1]
+          result = grid_four.traverse_four(node, :south_west)
+          expect(result).to equal(2)
+        end
       end
     end
   end

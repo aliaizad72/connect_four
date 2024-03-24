@@ -117,7 +117,7 @@ class Grid
 
   def traverse_four(node, direction, count = 1)
     coordinates = node.neighbors[direction]
-    return count if coordinates.nil? || coordinates.empty?
+    return count if coordinates.nil? # coordinates of nonexistent node
 
     neighbor = @matrix[coordinates[0], coordinates[1]]
     return count if neighbor.color.nil? || neighbor.color != node.color || count == 4
