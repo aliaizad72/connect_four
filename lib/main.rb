@@ -121,23 +121,35 @@ class Grid
     result = false
     node = @matrix[coordinates[0], coordinates[1]]
     node.neighbors.each_key do |direction|
-      result = true if node_endpoint_win(node, direction)
+      result = true if node_endpoint_win(node, direction) || node_midpoint_win(node, direction)
     end
     result
   end
 
-  def count_neighbors_in_direction(node, direction, target_count, count = 0)
+  def n_neighbors_in_direction?(node, direction, target_count, count = 0)
     coordinates = node.neighbors[direction]
-    return count if coordinates.nil? # coordinates of nonexistent node
+    return count == target_count if coordinates.nil? # coordinates of nonexistent node
 
     neighbor = @matrix[coordinates[0], coordinates[1]]
-    return count if neighbor.color.nil? || neighbor.color != node.color || count == target_count
+    return count == target_count if neighbor.color.nil? || neighbor.color != node.color || count == target_count
 
-    count_neighbors_in_direction(neighbor, direction, target_count, count + 1)
+    n_neighbors_in_direction?(neighbor, direction, target_count, count + 1)
   end
 
   def node_endpoint_win(node, direction)
-    count_neighbors_in_direction(node, direction, 4) == 4
+    n_neighbors_in_direction?(node, direction, 3)
+  end
+
+  def node_midpoint_win(node, direction)
+    node_midpoint_one(node, direction) || node_midpoint_two(node, direction)
+  end
+
+  def node_midpoint_one(node, direction)
+    n_neighbors_in_direction?(node, direction, 2) && n_neighbors_in_direction?(node, node.opposite(direction), 1)
+  end
+
+  def node_midpoint_two(node, direction)
+    n_neighbors_in_direction?(node, direction, 1) && n_neighbors_in_direction?(node, node.opposite(direction), 2)
   end
 
   def show
