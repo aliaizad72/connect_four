@@ -89,7 +89,9 @@ class Grid
   end
 
   def column_full?(column_num)
-    column(column_num).none? { |node| node.color.nil? }
+    result = column(column_num).none? { |node| node.color.nil? }
+    puts 'This column is full, try another column.' if result
+    result
   end
 
   def column(column_num)
@@ -167,6 +169,33 @@ class Game
     print "Player #{turn}, enter your name: "
     gets.chomp
   end
+
+  def play
+    add_players
+    announce_colors
+    play_round
+  end
+
+  def announce_colors
+    @players.each(&:tell_color)
+  end
+
+  def play_round
+    winner = false
+    until winner || grid.full?
+      @players.each do |player|
+        grid.show
+        column_num = ask_column(player)
+        winner = true
+      end
+    end
+  end
+
+  def ask_column(player)
+    column_num = player.choose_column
+    column_num = player.choose_column while grid.column_full?(column_num)
+    column_num
+  end
 end
 
 # Player contains player node color and their name
@@ -178,13 +207,14 @@ class Player
     @color = color
   end
 
-  def choose_column(input = 'wrong')
+  def choose_column
+    input = 'wrong'
     until input.to_i > 0 && input.to_i < 8 # rubocop:disable Style/NumericPredicate
       print "#{name}, enter the column of your choice: "
       input = gets.chomp
       puts 'ENTER NUMBER FROM 1 TO 7!' if input.to_i <= 0 || input.to_i > 7
     end
-    input
+    input.to_i
   end
 
   def tell_color
@@ -196,14 +226,19 @@ end
 class ConnectFour
   def play
     introduction
+    game = Game.new
+    game.play
   end
 
   def introduction
     puts "Let's play Connect Four!"
-    puts "Your goal in this game is to 'connect' four of your tokens to line up consecutively in the horizontal, vertical or diagonal direction." # rubocop:disable Layout/LineLength
+    puts "Your goal in this game is to 'connect' four of your tokens to line up consecutively"
+    puts 'in the horizontal, vertical or diagonal direction.'
     puts 'At the start of the game, you will be assigned either the blue token, or the yellow token.'
-    puts 'Have fun!'
+    puts 'To put your token on the grid, you will need to enter a column number.'
+    puts 'The token will fall down to the lowest row in the column that does not contain a token yet.'
+    puts "Whoever connects four first, wins! Have fun!\n\n"
   end
 end
 
-ConnectFour.new.play
+# ConnectFour.new.play

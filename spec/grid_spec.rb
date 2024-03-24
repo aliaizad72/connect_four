@@ -51,6 +51,27 @@ describe Grid do # rubocop:disable Metrics/BlockLength
     end
   end
 
+  describe '#column_full?' do
+    subject(:grid_colfull) { described_class.new }
+    it 'returns false if column is not full' do
+      result = grid_colfull.column_full?(0)
+      expect(result).to be false
+    end
+
+    it 'returns true if column is full' do
+      grid_colfull.column(0).each { |node| node.color = 'blue'}
+      result = grid_colfull.column_full?(0)
+      expect(result).to be true
+    end
+
+    it 'outputs error prompt when true' do
+      grid_colfull.column(0).each { |node| node.color = 'blue'}
+      error_prompt = 'This column is full, try another column.'
+      expect(grid_colfull).to receive(:puts).with(error_prompt).once
+      grid_colfull.column_full?(0)
+    end
+  end
+
   describe '#add_token' do
     subject(:grid_add) { described_class.new }
     context 'with spaces in the columns' do
