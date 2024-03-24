@@ -127,32 +127,14 @@ describe Grid do # rubocop:disable Metrics/BlockLength
       expect(result).to be true
     end
 
-    describe '#traverse_four' do
-      context 'a recursive method that travel in one direction of node until it has travel 4 nodes or reached a deadend' do # rubocop:disable Layout/LineLength
-        it 'if method is called less than 4 times, it will return less than 4' do
-          grid_four.matrix[0, 0].color = 'blue'
-          grid_four.matrix[0, 1].color = 'blue'
-          node = grid_four.matrix[0, 1]
-          result = grid_four.traverse_four(node, :east)
-          expect(result).to be < 4
-        end
-
-        it 'if method is called four times, it will return 4' do
-          grid_four.matrix[0, 0].color = 'blue'
-          grid_four.matrix[0, 1].color = 'blue'
-          grid_four.matrix[0, 2].color = 'blue'
-          grid_four.matrix[0, 3].color = 'blue'
-          node = grid_four.matrix[0, 0]
-          result = grid_four.traverse_four(node, :east)
-          expect(result).to equal(4)
-        end
-
-        it 'returns the traverse count when node is trying to move in direction outside of grid' do
+    describe '#count_neighbors_in_direction' do
+      context 'a recursive method that counts neighbors in one direction of node until it has count the target counts or reached a deadend' do # rubocop:disable Layout/LineLength
+        it 'returns the count when node is trying to move in direction outside of grid' do
           grid_four.matrix[1, 1].color = 'blue'
           grid_four.matrix[0, 0].color = 'blue'
           node = grid_four.matrix[1, 1]
-          result = grid_four.traverse_four(node, :south_west)
-          expect(result).to equal(2)
+          result = grid_four.count_neighbors_in_direction(node, :south_west, 4)
+          expect(result).to equal(1)
         end
       end
     end

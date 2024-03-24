@@ -110,19 +110,19 @@ class Grid
     result = false
     node = @matrix[coordinates[0], coordinates[1]]
     node.neighbors.each_key do |direction|
-      result = true if traverse_four(node, direction) == 4
+      result = true if count_neighbors_in_direction(node, direction, 4) == 4
     end
     result
   end
 
-  def traverse_four(node, direction, count = 1)
+  def count_neighbors_in_direction(node, direction, target_count, count = 0)
     coordinates = node.neighbors[direction]
     return count if coordinates.nil? # coordinates of nonexistent node
 
     neighbor = @matrix[coordinates[0], coordinates[1]]
-    return count if neighbor.color.nil? || neighbor.color != node.color || count == 4
+    return count if neighbor.color.nil? || neighbor.color != node.color || count == target_count
 
-    traverse_four(neighbor, direction, count + 1)
+    count_neighbors_in_direction(neighbor, direction, target_count, count + 1)
   end
 
   def show
