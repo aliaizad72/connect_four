@@ -29,4 +29,32 @@ describe Game do # rubocop:disable Metrics/BlockLength
       end
     end
   end
+
+  describe '#ask_column' do
+    subject(:game_column) { described_class.new }
+    let(:player_one) { Player.new('Ali', 'blue') }
+    context 'if column is not full' do
+      before do
+        grid = game_column.grid
+        allow(grid).to receive(:column_full?).and_return(false)
+      end
+
+      it 'sends #choose_column once' do
+        expect(player_one).to receive(:choose_column).once
+        game_column.ask_column(player_one)
+      end
+    end
+
+    context 'if column if full, ask again' do
+      before do
+        grid = game_column.grid
+        allow(grid).to receive(:column_full?).and_return(true, false)
+      end
+
+      it 'sends #choose_column twice' do
+        expect(player_one).to receive(:choose_column).twice
+        game_column.ask_column(player_one)
+      end
+    end
+  end
 end
