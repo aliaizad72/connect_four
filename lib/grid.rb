@@ -104,7 +104,7 @@ class Grid
   # This is a recursive method that checks whether Node, has n neighbors in the direction that was inputted.
   def n_neighbors_in_direction?(node, direction, target_count, count = 0)
     coordinates = node.neighbors[direction]
-    return count == target_count if coordinates.nil? # coordinates of nonexistent node
+    return count == target_count if coordinates.nil? # coordinates of nonexistent node should be nil
 
     neighbor = @matrix[coordinates[0], coordinates[1]]
     return count == target_count if neighbor.color.nil? || neighbor.color != node.color || count == target_count

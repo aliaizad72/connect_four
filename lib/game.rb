@@ -49,6 +49,7 @@ class Game
         end
       end
     end
+    announce_draw if grid.full?
   end
 
   def ask_column(player)
@@ -59,6 +60,10 @@ class Game
 
   def announce_winner(player)
     puts "  #{player.name}, you won!"
+  end
+
+  def announce_draw
+    puts '  Game ends in draw. :('
   end
 
   def reset
