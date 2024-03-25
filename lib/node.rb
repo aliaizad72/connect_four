@@ -24,6 +24,15 @@ class Node
     # selecting non nil neighbors only^^
   end
 
+  def neighbor(vector)
+    row = @coordinates[0] + vector[0]
+    col = @coordinates[1] + vector[1]
+
+    return unless Grid.in_grid?(row, col)
+
+    [row, col]
+  end
+
   def to_s
     case color
     when 'yellow'
@@ -35,19 +44,6 @@ class Node
     end
   end
 
-  def <=>(other)
-    coordinates <=> other.coordinates
-  end
-
-  def neighbor(vector)
-    row = @coordinates[0] + vector[0]
-    col = @coordinates[1] + vector[1]
-
-    return unless Grid.in_grid?(row, col)
-
-    [row, col]
-  end
-
   def opposite(direction)
     { north: :south,
       east: :west,
@@ -57,5 +53,10 @@ class Node
       south_east: :north_west,
       south_west: :north_east,
       north_west: :south_east }[direction]
+  end
+
+  # included for equality test in spec
+  def <=>(other)
+    coordinates <=> other.coordinates
   end
 end

@@ -31,16 +31,38 @@ class Grid
     @matrix = Matrix[array[0], array[1], array[2], array[3], array[4], array[5]]
   end
 
-  def add_token(column_num, color)
-    unoccupied_node(column_num).color = color
+  def full?
+    @matrix.to_a.flatten.all?(&:color)
   end
 
-  def unoccupied_node(column_num)
-    column(column_num).find { |node| node.color.nil? }
+  def show
+    puts <<-HEREDOC
+
+    #{row_seperator}
+    #{show_row(5)}
+    #{row_seperator}
+    #{show_row(4)}
+    #{row_seperator}
+    #{show_row(3)}
+    #{row_seperator}
+    #{show_row(2)}
+    #{row_seperator}
+    #{show_row(1)}
+    #{row_seperator}
+    #{show_row(0)}
+    #{row_seperator}
+    | 0️⃣  | 1️⃣  | 2️⃣  | 3️⃣  | 4️⃣  | 5️⃣  | 6️⃣  |
+    #{row_seperator}
+
+    HEREDOC
   end
 
-  def empty_node_coordinates(column_num)
-    unoccupied_node(column_num).coordinates
+  def row_seperator
+    '+----+----+----+----+----+----+----+'
+  end
+
+  def show_row(row_num)
+    "| #{@matrix[row_num, 0]} | #{@matrix[row_num, 1]} | #{@matrix[row_num, 2]} | #{@matrix[row_num, 3]} | #{@matrix[row_num, 4]} | #{@matrix[row_num, 5]} | #{@matrix[row_num, 6]} |" # rubocop:disable Layout/LineLength
   end
 
   def column_full?(column_num)
@@ -53,8 +75,16 @@ class Grid
     @matrix.column(column_num).to_a
   end
 
-  def full?
-    @matrix.to_a.flatten.all?(&:color)
+  def empty_node_coordinates(column_num)
+    unoccupied_node(column_num).coordinates
+  end
+
+  def unoccupied_node(column_num)
+    column(column_num).find { |node| node.color.nil? }
+  end
+
+  def add_token(column_num, color)
+    unoccupied_node(column_num).color = color
   end
 
   def four_in_a_row?(coordinates)
@@ -90,35 +120,5 @@ class Grid
 
   def midpoint_case_two(node, direction)
     n_neighbors_in_direction?(node, direction, 1) && n_neighbors_in_direction?(node, node.opposite(direction), 2)
-  end
-
-  def show
-    puts <<-HEREDOC
-
-    #{row_seperator}
-    #{show_row(5)}
-    #{row_seperator}
-    #{show_row(4)}
-    #{row_seperator}
-    #{show_row(3)}
-    #{row_seperator}
-    #{show_row(2)}
-    #{row_seperator}
-    #{show_row(1)}
-    #{row_seperator}
-    #{show_row(0)}
-    #{row_seperator}
-    | 0️⃣  | 1️⃣  | 2️⃣  | 3️⃣  | 4️⃣  | 5️⃣  | 6️⃣  |
-    #{row_seperator}
-
-    HEREDOC
-  end
-
-  def row_seperator
-    '+----+----+----+----+----+----+----+'
-  end
-
-  def show_row(row_num)
-    "| #{@matrix[row_num, 0]} | #{@matrix[row_num, 1]} | #{@matrix[row_num, 2]} | #{@matrix[row_num, 3]} | #{@matrix[row_num, 4]} | #{@matrix[row_num, 5]} | #{@matrix[row_num, 6]} |" # rubocop:disable Layout/LineLength
   end
 end

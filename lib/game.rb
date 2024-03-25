@@ -11,6 +11,12 @@ class Game
     @grid = Grid.new
   end
 
+  def play
+    add_players if @players.empty?
+    announce_colors
+    play_round
+  end
+
   def add_players
     2.times { |i| @players.push(Player.new(ask_name(i + 1), COLORS[i])) }
   end
@@ -20,12 +26,6 @@ class Game
     name = gets.chomp
     puts
     name
-  end
-
-  def play
-    add_players if @players.empty?
-    announce_colors
-    play_round
   end
 
   def announce_colors
@@ -51,14 +51,14 @@ class Game
     end
   end
 
-  def announce_winner(player)
-    puts "  #{player.name}, you won!"
-  end
-
   def ask_column(player)
     column_num = player.choose_column
     column_num = player.choose_column while grid.column_full?(column_num)
     column_num
+  end
+
+  def announce_winner(player)
+    puts "  #{player.name}, you won!"
   end
 
   def reset

@@ -9,6 +9,10 @@ class Player
     @color = color
   end
 
+  def tell_color
+    puts "  #{name}, your token colour is #{color}."
+  end
+
   def choose_column # rubocop:disable Metrics/MethodLength
     input = 7
     until input >= 0 && input < 7
@@ -23,9 +27,5 @@ class Player
       end
     end
     input
-  end
-
-  def tell_color
-    puts "  #{name}, your token colour is #{color}."
   end
 end
