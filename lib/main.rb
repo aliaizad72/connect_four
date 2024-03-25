@@ -259,7 +259,7 @@ class Player
   def choose_column
     input = 7
     until input.to_i >= 0 && input.to_i < 7
-      print "#{name}, enter the column of your choice: "
+      print "#{name}, enter the column of your choice (0 to 6): "
       input = gets.chomp
       puts 'ENTER NUMBER FROM 0 TO 6!' if input.to_i.negative? || input.to_i > 6
     end
@@ -281,13 +281,26 @@ class ConnectFour
   end
 
   def introduction
-    puts "Let's play Connect Four!"
+    banner
     puts "Your goal in this game is to 'connect' four of your tokens to line up consecutively"
     puts 'in the horizontal, vertical or diagonal direction.'
     puts 'At the start of the game, you will be assigned either the blue token, or the yellow token.'
     puts 'To put your token on the grid, you will need to enter a column number.'
     puts 'The token will fall down to the lowest row in the column that does not contain a token yet.'
     puts "Whoever connects four first, wins! Have fun!\n\n"
+  end
+
+  def banner
+    puts <<-HEREDOC
+
+   ██████╗ ██████╗ ███╗   ██╗███╗   ██╗███████╗ ██████╗████████╗    ███████╗ ██████╗ ██╗   ██╗██████╗
+  ██╔════╝██╔═══██╗████╗  ██║████╗  ██║██╔════╝██╔════╝╚══██╔══╝    ██╔════╝██╔═══██╗██║   ██║██╔══██╗
+  ██║     ██║   ██║██╔██╗ ██║██╔██╗ ██║█████╗  ██║        ██║       █████╗  ██║   ██║██║   ██║██████╔╝
+  ██║     ██║   ██║██║╚██╗██║██║╚██╗██║██╔══╝  ██║        ██║       ██╔══╝  ██║   ██║██║   ██║██╔══██╗
+  ╚██████╗╚██████╔╝██║ ╚████║██║ ╚████║███████╗╚██████╗   ██║       ██║     ╚██████╔╝╚██████╔╝██║  ██║
+   ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═╝       ╚═╝      ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
+
+    HEREDOC
   end
 
   def play_again(game)
