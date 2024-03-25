@@ -78,7 +78,7 @@ describe Grid do # rubocop:disable Metrics/BlockLength
       before do
         column_num = 0
         node = grid_add.column(column_num)[0]
-        allow(grid_add).to receive(:unoccupied_node).with(column_num).and_return(node)
+        allow(grid_add).to receive(:empty_node).with(column_num).and_return(node)
       end
 
       it 'changes the node colour from nil to color' do
@@ -89,13 +89,13 @@ describe Grid do # rubocop:disable Metrics/BlockLength
       end
     end
 
-    describe '#unoccupied_node' do
-      subject(:grid_unoccupied) { described_class.new }
+    describe '#empty_node' do
+      subject(:grid_empty) { described_class.new }
       it 'returns the node if column is not full' do
         column_num = 0
-        grid_unoccupied.column(column_num)[0].color = 'blue' # modifying mat so that it is partially full
-        node = grid_unoccupied.column(column_num)[1] # 1 is the node that we want since 0 is 'taken'
-        result = grid_unoccupied.unoccupied_node(column_num)
+        grid_empty.column(column_num)[0].color = 'blue' # modifying mat so that it is partially full
+        node = grid_empty.column(column_num)[1] # 1 is the node that we want since 0 is 'taken'
+        result = grid_empty.empty_node(column_num)
         expect(result).to equal(node)
       end
     end

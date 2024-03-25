@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Node is an object that links with other Nodes, in this context it construct the 'spaces' in the Grid
+# Node serves as the spaces in the grid, which at any time, can be empty or filled with colors. Node also knows its' neighbors, that is a Node object that is one Node away from itself. There are 8 maximum neighbors to a Node. The rationale for creating Node is to allow Grid to implement a mechanism to determine the winning conditions in a 'tree-traversal-like' manner, rather than having a list of ALL THE COORDINATES OF WINNING CONDITION OF CONNECT FOUR.
 class Node
   include Comparable # included for a test of equality in spec
 

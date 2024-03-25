@@ -1,15 +1,17 @@
 # frozen_string_literal: true
 
 require 'matrix'
-# Grid is where the game will be played, consists of Nodes that know its neighbours
+
+# Grid serves as the playing board of the Game.
 class Grid
   attr_accessor :matrix
 
   def initialize
-    @matrix = nil # matrix to make it easier for inputting which column player wants to select
-    create_matrix # matrix is used as coordinates reference for the nodes
+    @matrix = nil
+    create_matrix
   end
 
+  # Connect Four board contains 6 rows and 7 columns
   def self.in_grid?(row, col)
     row >= 0 && row < 6 && col >= 0 && col < 7
   end
@@ -22,6 +24,7 @@ class Grid
     end
   end
 
+  # Matrix is chosen as a method to store Nodes because it allows for easier column access. Furthermore, it is also easier to access each Nodes by using a Matrix rather than a nested array.
   def create_matrix
     array = Array.new(6, [])
     array.each_index do |ind|
@@ -76,26 +79,29 @@ class Grid
   end
 
   def empty_node_coordinates(column_num)
-    unoccupied_node(column_num).coordinates
+    empty_node(column_num).coordinates
   end
 
-  def unoccupied_node(column_num)
+  def empty_node(column_num)
     column(column_num).find { |node| node.color.nil? }
   end
 
   def add_token(column_num, color)
-    unoccupied_node(column_num).color = color
+    empty_node(column_num).color = color
   end
 
+  # This is the reason why Node was created.
   def four_in_a_row?(coordinates)
     result = false
     node = @matrix[coordinates[0], coordinates[1]]
+    # Node.neighbors is a Hashmap, where the key is the direction and the value is the correspoding coordinates of neighbor of Node in that said direction. By calling each_key here, we are able to determine if Node and its neighbors (in any direction), fulfills any one of the winning conditions: node_endpoint_win? or node_midpoint_win?
     node.neighbors.each_key do |direction|
       result = true if node_endpoint_win?(node, direction) || node_midpoint_win?(node, direction)
     end
     result
   end
 
+  # This is a recursive method that checks whether Node, has n neighbors in the direction that was inputted.
   def n_neighbors_in_direction?(node, direction, target_count, count = 0)
     coordinates = node.neighbors[direction]
     return count == target_count if coordinates.nil? # coordinates of nonexistent node
@@ -106,18 +112,22 @@ class Grid
     n_neighbors_in_direction?(neighbor, direction, target_count, count + 1)
   end
 
+  # The first winning condition is if the Node added is an endpoint of four tokens in a row e.g O(here) -> O -> O -> O(or here!). In this case, we only need to check whether node has 3 neighbors in a row, in all directions of it's neighbors.
   def node_endpoint_win?(node, direction)
     n_neighbors_in_direction?(node, direction, 3)
   end
 
+  # The second winning condition is if the Node added is a midpoint of four tokens in a row e.g O -> O(here) -> O(or here) -> O. In this case, there are two different subcases that we need to look into.
   def node_midpoint_win?(node, direction)
     midpoint_case_one(node, direction) || midpoint_case_two(node, direction)
   end
 
+  # The first subcase is if the Node added is if the midpoint is the second Node in a row of four nodes e.g O -> O(here) -> O -> O. In this case, we need to check if node has 2 neighbors in a row in any direction AND if node has 1 neighbor in the CORRESPONDING OPPOSITE DIRECTION. In the example here, it means that the direction should be EAST, and the opposite direction is WEST.
   def midpoint_case_one(node, direction)
     n_neighbors_in_direction?(node, direction, 2) && n_neighbors_in_direction?(node, node.opposite(direction), 1)
   end
 
+  # The second subcase is if the Node added is if the midpoint is the third Node in a row of four nodes e.g O -> O -> O(here) -> O. In this case, we need to check if node has 1 neighbor in any direction AND if node has 2 neighbor in the CORRESPONDING OPPOSITE DIRECTION. In the example here, it means that the direction should be EAST, and the opposite direction is WEST
   def midpoint_case_two(node, direction)
     n_neighbors_in_direction?(node, direction, 1) && n_neighbors_in_direction?(node, node.opposite(direction), 2)
   end

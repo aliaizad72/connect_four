@@ -6,4 +6,4 @@ require_relative './player'
 require_relative './game'
 require_relative './connect_four'
 
-# ConnectFour.new.play
+ConnectFour.new.play
