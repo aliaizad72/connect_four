@@ -105,7 +105,7 @@ class Grid
 
   def column_full?(column_num)
     result = column(column_num).none? { |node| node.color.nil? }
-    puts 'This column is full, try another column.' if result
+    puts '  This column is full, try another column.' if result
     result
   end
 
@@ -199,8 +199,10 @@ class Game
   end
 
   def ask_name(turn)
-    print "Player #{turn}, enter your name: "
-    gets.chomp
+    print "  Player #{turn}, enter your name: "
+    name = gets.chomp
+    puts
+    name
   end
 
   def play
@@ -233,7 +235,7 @@ class Game
   end
 
   def announce_winner(player)
-    puts "#{player.name}, you won!"
+    puts "  #{player.name}, you won!"
   end
 
   def ask_column(player)
@@ -259,15 +261,15 @@ class Player
   def choose_column
     input = 7
     until input.to_i >= 0 && input.to_i < 7
-      print "#{name}, enter the column of your choice (0 to 6): "
+      print "  #{name}, enter the column of your choice (0 to 6): "
       input = gets.chomp
-      puts 'ENTER NUMBER FROM 0 TO 6!' if input.to_i.negative? || input.to_i > 6
+      puts '  ENTER NUMBER FROM 0 TO 6!' if input.to_i.negative? || input.to_i > 6
     end
     input.to_i
   end
 
   def tell_color
-    puts "#{name}, your token colour is #{color}."
+    puts "  #{name}, your token colour is #{color}."
   end
 end
 
@@ -282,16 +284,16 @@ class ConnectFour
 
   def introduction
     banner
-    puts "Your goal in this game is to 'connect' four of your tokens to line up consecutively"
-    puts 'in the horizontal, vertical or diagonal direction.'
-    puts 'At the start of the game, you will be assigned either the blue token, or the yellow token.'
-    puts 'To put your token on the grid, you will need to enter a column number.'
-    puts 'The token will fall down to the lowest row in the column that does not contain a token yet.'
-    puts "Whoever connects four first, wins! Have fun!\n\n"
+    puts "  Connect four of your tokens to line up consecutively in any direction.\n\n"
+    puts "  At the start of the game, you will be assigned either the blue token, or the yellow token.\n\n"
+    puts '  To put your token on the grid, you will need to enter a column number.'
+    puts "  The token will fall down to the lowest row in the column that does not contain a token yet.\n\n"
+    puts "  Whoever connects four first, wins! Have fun!\n\n"
   end
 
   def banner
     puts <<-HEREDOC
+  =====================================================================================================
 
    ██████╗ ██████╗ ███╗   ██╗███╗   ██╗███████╗ ██████╗████████╗    ███████╗ ██████╗ ██╗   ██╗██████╗
   ██╔════╝██╔═══██╗████╗  ██║████╗  ██║██╔════╝██╔════╝╚══██╔══╝    ██╔════╝██╔═══██╗██║   ██║██╔══██╗
@@ -300,6 +302,7 @@ class ConnectFour
   ╚██████╗╚██████╔╝██║ ╚████║██║ ╚████║███████╗╚██████╗   ██║       ██║     ╚██████╔╝╚██████╔╝██║  ██║
    ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═╝       ╚═╝      ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
 
+  =====================================================================================================
     HEREDOC
   end
 
@@ -308,13 +311,13 @@ class ConnectFour
       game.reset
       game.play
     end
-    puts 'Thanks for playing!'
+    puts '  Thanks for playing!'
   end
 
   def ask_play_again
-    print 'Do you want to play again?(y/n): '
+    print '  Do you want to play again?(y/n): '
     gets.chomp
   end
 end
 
-ConnectFour.new.play
+# ConnectFour.new.play

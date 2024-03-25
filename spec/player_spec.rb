@@ -13,17 +13,17 @@ describe Player do
       it 'returns the input' do
         input = '2'
         result = player_one.choose_column
-        expect(result).to eql(input)
+        expect(result).to eql(input.to_i)
       end
     end
 
     context 'with the wrong input once, and the right input after' do
       before do
-        allow(player_one).to receive(:gets).and_return('wrong again', '2')
+        allow(player_one).to receive(:gets).and_return('7', '2')
       end
 
       it 'outputs error prompt once' do
-        error_prompt =  'ENTER NUMBER FROM 1 TO 7!'
+        error_prompt =  '  ENTER NUMBER FROM 0 TO 6!'
         expect(player_one).to receive(:puts).with(error_prompt).once
         player_one.choose_column
       end
