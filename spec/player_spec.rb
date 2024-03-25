@@ -2,8 +2,8 @@
 
 require_relative '../lib/main'
 
-describe Player do
-  describe '#choose_column' do
+describe Player do # rubocop:disable Metrics/BlockLength
+  describe '#choose_column' do # rubocop:disable Metrics/BlockLength
     subject(:player_one) { Player.new('Ali', 'blue') }
     context 'input is an integer' do
       before do
