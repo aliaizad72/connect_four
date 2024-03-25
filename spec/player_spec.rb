@@ -5,7 +5,7 @@ require_relative '../lib/main'
 describe Player do
   describe '#choose_column' do
     subject(:player_one) { Player.new('Ali', 'blue') }
-    context 'with the right input' do
+    context 'input is an integer' do
       before do
         allow(player_one).to receive(:gets).and_return('2')
       end
@@ -17,14 +17,26 @@ describe Player do
       end
     end
 
-    context 'with the wrong input once, and the right input after' do
+    context 'inputs are integer, but the first one is not within the range' do
       before do
         allow(player_one).to receive(:gets).and_return('7', '2')
       end
 
       it 'outputs error prompt once' do
-        error_prompt =  '  ENTER NUMBER FROM 0 TO 6!'
+        error_prompt =  '  ENTER A NUMBER FROM 0 TO 6!'
         expect(player_one).to receive(:puts).with(error_prompt).once
+        player_one.choose_column
+      end
+    end
+
+    context 'first input is not an integer' do
+      before do
+        allow(player_one).to receive(:gets).and_return('7eleven', '2')
+      end
+
+      it 'outputs rescue prompt once' do
+        rescue_prompt = '  Please enter a NUMBER, not a STRING'
+        expect(player_one).to receive(:puts).with(rescue_prompt).once
         player_one.choose_column
       end
     end
